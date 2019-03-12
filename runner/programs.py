@@ -45,10 +45,10 @@ class PipProgram(Program):
         venv_name = f"{self.name}_venv"
         pip_setup = [
             f"python3 -m venv {venv_name}",
-            f"source {venv_name}/bin/activate"
+            f". {venv_name}/bin/activate"
         ]
         pip_test = [
-            f"source {venv_name}/bin/activate"
+            f". {venv_name}/bin/activate"
         ]
 
         super().__init__(pip_setup + setup_commands, pip_test + test_commands)

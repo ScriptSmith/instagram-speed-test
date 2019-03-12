@@ -63,7 +63,7 @@ class Instamancer(Program):
         self.name = "instamancer"
         super().__init__(
             ["npm install -g instamancer"],
-            ["instamancer hashtag selfie --count=100 -f=/dev/null'"]
+            ["instamancer hashtag selfie --count=100 -f=/dev/null"]
         )
 
 

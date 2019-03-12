@@ -35,8 +35,9 @@ class Program:
 
         process = subprocess.Popen(commands, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE, shell=True)
-        proc_stdout = process.communicate()[0].strip()
-        proc_stderr = process.communicate()[1].strip()
+        comm = process.communicate()
+        proc_stdout = comm[0].strip()
+        proc_stderr = comm[1].strip()
 
         if print_output:
             print(proc_stdout.decode('utf-8'))

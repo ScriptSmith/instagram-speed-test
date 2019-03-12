@@ -39,6 +39,8 @@ class Program:
         proc_stdout = comm[0].strip()
         proc_stderr = comm[1].strip()
 
+        print(f"Exited with code {process.returncode}")
+
         if print_output:
             print(proc_stdout.decode('utf-8'))
             print(proc_stderr.decode('utf-8'))

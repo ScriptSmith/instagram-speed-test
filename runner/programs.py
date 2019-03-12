@@ -37,7 +37,7 @@ class Program:
         proc_stdout = process.communicate()[0].strip()
 
         if print_output:
-            print(proc_stdout)
+            print(proc_stdout.decode('utf-8'))
 
 
 class PipProgram(Program):
@@ -46,7 +46,6 @@ class PipProgram(Program):
         pip_setup = [
             f"python3 -m venv {venv_name}",
             f". {venv_name}/bin/activate",
-            "which pip"
         ]
         pip_test = [
             f". {venv_name}/bin/activate"
@@ -79,4 +78,28 @@ class Instaloader(PipProgram):
         super().__init__(
             ["pip install instaloader"],
             ["instaloader '#selfie' --no-pictures -V -c 100"]
+        )
+
+
+class Instalooter(PipProgram):
+    def __init__(self):
+        self.name = "instalooter"
+        super().__init__(
+            ["pip install instalooter --pre"],
+            ["instalooter hashtag selfie -n 100 -D"]
+        )
+
+
+class InstagramScraper(PipProgram):
+    def __init__(self):
+        self.name = "instagram-scraper"
+
+        username = os.environ.get('INSTAGRAM_USER')
+        password = os.environ.get('INSTAGRAM_PASS')
+        test_command = "instagram-scraper selfie --tag --maximum=100" + \
+                       f" -u {username} -p {password}"
+
+        super().__init__(
+            ["pip install instagram-scraper"],
+            [test_command]
         )

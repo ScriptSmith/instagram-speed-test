@@ -15,7 +15,7 @@ class Program:
 
     def setup(self):
         commands = " && ".join(self.setup_commands)
-        self.subprocess_cmd(commands, print_output=True)
+        self.subprocess_cmd(commands, print_output=False)
 
     def test(self):
         commands = " && ".join(self.test_commands)
@@ -33,11 +33,14 @@ class Program:
         if os.environ.get('PRINT_COMMANDS'):
             return
 
-        process = subprocess.Popen(commands, stdout=subprocess.PIPE, shell=True)
+        process = subprocess.Popen(commands, stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE, shell=True)
         proc_stdout = process.communicate()[0].strip()
+        proc_stderr = process.communicate()[1].strip()
 
         if print_output:
             print(proc_stdout.decode('utf-8'))
+            print(proc_stderr.decode('utf-8'))
 
 
 class PipProgram(Program):

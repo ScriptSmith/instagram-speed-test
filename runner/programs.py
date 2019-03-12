@@ -45,7 +45,8 @@ class PipProgram(Program):
         venv_name = f"{self.name}_venv"
         pip_setup = [
             f"python3 -m venv {venv_name}",
-            f". {venv_name}/bin/activate"
+            f". {venv_name}/bin/activate",
+            "which pip"
         ]
         pip_test = [
             f". {venv_name}/bin/activate"
@@ -57,16 +58,25 @@ class PipProgram(Program):
 class Instamancer(Program):
     def __init__(self):
         self.name = "instamancer"
-        super().__init__(["npm install instamancer"], ["echo 'Testing 1'"])
+        super().__init__(
+            ["sudo npm install -g instamancer"],
+            ["instamancer hashtag selfie --count=100 -f=/dev/null'"]
+        )
 
 
 class Instaphyte(PipProgram):
     def __init__(self):
         self.name = "instaphyte"
-        super().__init__(["pip install instaphyte"], ["echo 'Testing 2'"])
+        super().__init__(
+            ["pip install instaphyte"],
+            ["instaphyte hashtag selfie --count=100 -f=/dev/null"]
+        )
 
 
 class Instaloader(PipProgram):
     def __init__(self):
         self.name = "instaloader"
-        super().__init__(["pip install instaloader"], ["echo 'Testing 3'"])
+        super().__init__(
+            ["pip install instaloader"],
+            ["instaloader '#selfie' --no-pictures -V -c 100"]
+        )

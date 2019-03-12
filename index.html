@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(getData);
+
+        function getData() {
+            var xmlhttp = new XMLHttpRequest();
+            var url = "data.json";
+
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    var timeData = JSON.parse(this.responseText);
+                    drawChart(timeData);
+                }
+            };
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+        }
+
+        function drawChart(timeData) {
+            const tools = [
+                'instamancer',
+                'instaphyte',
+                'instaloader',
+                'instalooter',
+                'instagram-scraper',
+            ];
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('datetime', 'DateTime');
+            for (const tool of tools) {
+                data.addColumn('number', tool);
+            }
+
+            Object.entries(timeData).forEach(([time, values]) => {
+                const row = [];
+
+                const d = new Date(0);
+                d.setUTCSeconds(parseInt(time));
+                row.push(d);
+
+                for (const tool of tools) {
+                    row.push(values[tool] > 0 ? values[tool] / 500 : null)
+                }
+                data.addRow(row);
+            });
+
+            var options = {
+                title: 'Instagram Speed Test',
+                curveType: 'function',
+                legend: {position: 'bottom'},
+                interpolateNulls: true,
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+            chart.draw(data, options);
+        }
+    </script>
+</head>
+<body>
+<div id="curve_chart" style="width: 100%; height: 600px"></div>
+</body>
+</html>

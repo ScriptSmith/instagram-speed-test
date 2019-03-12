@@ -10,8 +10,10 @@ class Program:
     test_commands: List[str] = []
 
     def __init__(self, setup_commands: List[str], test_commands: List[str]):
-        self.setup_commands = setup_commands
-        self.test_commands = test_commands
+        output_dir = ["cd output"]
+
+        self.setup_commands = output_dir + setup_commands
+        self.test_commands = output_dir + test_commands
 
     def setup(self):
         commands = " && ".join(self.setup_commands)
@@ -21,11 +23,15 @@ class Program:
         commands = " && ".join(self.test_commands)
 
         start_time = time.time()
-        self.subprocess_cmd(commands, print_output=True)
+        retcode = self.subprocess_cmd(commands, print_output=True)
         stop_time = time.time()
 
         duration = stop_time - start_time
         print(f"Execution of {self.name} took {duration} seconds")
+
+        return int(duration) if retcode == 0 else -1
+
+
 
     @staticmethod
     def subprocess_cmd(commands: str, print_output: bool):
@@ -41,9 +47,11 @@ class Program:
 
         print(f"Exited with code {process.returncode}")
 
-        if print_output:
+        if print_output or process.returncode != 0:
             print(proc_stdout.decode('utf-8'))
             print(proc_stderr.decode('utf-8'))
+
+        return process.returncode
 
 
 class PipProgram(Program):
@@ -65,7 +73,7 @@ class Instamancer(Program):
         self.name = "instamancer"
         super().__init__(
             ["npm install -g instamancer"],
-            ["instamancer hashtag selfie --count=100 -f=/dev/null"]
+            ["instamancer hashtag selfie --count=500 -f=/dev/null"]
         )
 
 
@@ -74,7 +82,7 @@ class Instaphyte(PipProgram):
         self.name = "instaphyte"
         super().__init__(
             ["pip install instaphyte"],
-            ["instaphyte hashtag selfie --count=100 -f=/dev/null"]
+            ["instaphyte hashtag selfie --count=500 -f=/dev/null"]
         )
 
 
@@ -83,7 +91,7 @@ class Instaloader(PipProgram):
         self.name = "instaloader"
         super().__init__(
             ["pip install instaloader"],
-            ["instaloader '#selfie' --no-pictures -V -c 100"]
+            ["instaloader '#selfie' --no-pictures -V -c 500"]
         )
 
 
@@ -92,7 +100,7 @@ class Instalooter(PipProgram):
         self.name = "instalooter"
         super().__init__(
             ["pip install instalooter --pre"],
-            ["instalooter hashtag selfie -n 100 -D"]
+            ["instalooter hashtag selfie -n 500 -D"]
         )
 
 
@@ -102,7 +110,7 @@ class InstagramScraper(PipProgram):
 
         username = os.environ.get('INSTAGRAM_USER')
         password = os.environ.get('INSTAGRAM_PASS')
-        test_command = "instagram-scraper selfie --tag --maximum=100" + \
+        test_command = "instagram-scraper selfie --tag --maximum=500" + \
                        f" -u {username} -p {password}"
 
         super().__init__(

@@ -29,9 +29,7 @@ class Program:
         duration = stop_time - start_time
         print(f"Execution of {self.name} took {duration} seconds")
 
-        return int(duration) if retcode == 0 else -1
-
-
+        return int(round(duration)) if retcode == 0 else -1
 
     @staticmethod
     def subprocess_cmd(commands: str, print_output: bool):

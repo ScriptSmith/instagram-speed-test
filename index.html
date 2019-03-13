@@ -51,7 +51,16 @@
             const speedValues = timeData[lastTime];
             for (const tool of tools) {
                 const toolSpeedCol = document.createElement("td");
-                toolSpeedCol.innerText = Math.round(postNumber / speedValues[tool]) + " posts/second";
+                const toolTime = speedValues[tool];
+
+                let toolTimeText;
+                if (toolTime > 0) {
+                    toolTimeText = Math.round(100 * postNumber / toolTime)/100 + " posts/second"
+                } else {
+                    toolTimeText = "Failed"
+                }
+
+                toolSpeedCol.innerText = toolTimeText;
                 speedValuesDiv.appendChild(toolSpeedCol);
             }
         }
@@ -88,6 +97,9 @@
                 },
                 vAxis: {
                     title: "Posts/second"
+                },
+                hAxis: {
+                    format: "MMM d, y - HH:mm"
                 },
                 lineWidth: 4,
                 pointSize: 5,

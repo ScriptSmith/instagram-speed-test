@@ -2,23 +2,33 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load('current', {'packages': ['corechart']});
         google.charts.setOnLoadCallback(getData);
 
         function getData() {
-            var xmlhttp = new XMLHttpRequest();
-            var url = "data.json";
-
-            xmlhttp.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    var timeData = JSON.parse(this.responseText);
-                    drawChart(timeData);
-                }
+            const config = {
+                apiKey: "AIzaSyD3DCu_y5AC3D1Qn8mczJwDxCd-Wl_7_DQ",
+                authDomain: "instagram-speed-test.firebaseapp.com",
+                databaseURL: "https://instagram-speed-test.firebaseio.com",
+                projectId: "instagram-speed-test",
+                storageBucket: "instagram-speed-test.appspot.com",
+                messagingSenderId: "998820631733"
             };
-            xmlhttp.open("GET", url, true);
-            xmlhttp.send();
+            firebase.initializeApp(config);
+
+            const db = firebase.firestore();
+
+            const data = {};
+            db.collection("times").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    data[doc.id] = doc.data();
+                });
+                drawChart(data);
+            });
         }
 
         function drawChart(timeData) {

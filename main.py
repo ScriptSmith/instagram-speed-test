@@ -1,8 +1,15 @@
-import json
 import random
 import time
 
 import runner.programs
+
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+cred = credentials.Certificate('key.json')
+default_app = firebase_admin.initialize_app(cred)
+
+db = firestore.client()
 
 programs = [
     runner.programs.Instamancer(),
@@ -12,7 +19,7 @@ programs = [
     runner.programs.InstagramScraper(),
 ]
 
-# random.shuffle(programs)
+random.shuffle(programs)
 
 current_time = int(time.time())
 
@@ -24,13 +31,5 @@ for program in programs:
 
     appendage[program.name] = duration
 
-with open("data.json", "r+") as f:
-    data = f.read()
-
-    json_data = json.loads(data)
-    json_data[current_time] = appendage
-
-    f.seek(0)
-    f.write(json.dumps(json_data))
-    f.truncate()
-
+doc_ref = db.collection('times').document(str(current_time))
+doc_ref.set(appendage)

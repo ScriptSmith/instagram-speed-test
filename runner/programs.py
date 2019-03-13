@@ -3,6 +3,8 @@ import subprocess
 import time
 from typing import List
 
+items = 100
+
 
 class Program:
     name: str = ""
@@ -71,7 +73,10 @@ class Instamancer(Program):
         self.name = "instamancer"
         super().__init__(
             ["npm install -g instamancer"],
-            ["instamancer hashtag selfie --count=500 -f=/dev/null"]
+            [
+                "export NO_SANDBOX=1",
+                f"instamancer hashtag selfie --count={items} -f=/dev/null"
+            ]
         )
 
 
@@ -80,7 +85,7 @@ class Instaphyte(PipProgram):
         self.name = "instaphyte"
         super().__init__(
             ["pip install instaphyte"],
-            ["instaphyte hashtag selfie --count=500 -f=/dev/null"]
+            [f"instaphyte hashtag selfie --count={items} -f=/dev/null"]
         )
 
 
@@ -89,7 +94,7 @@ class Instaloader(PipProgram):
         self.name = "instaloader"
         super().__init__(
             ["pip install instaloader"],
-            ["instaloader '#selfie' --no-pictures -V -c 500"]
+            [f"instaloader '#selfie' --no-pictures -V -c {items}"]
         )
 
 
@@ -98,7 +103,7 @@ class Instalooter(PipProgram):
         self.name = "instalooter"
         super().__init__(
             ["pip install instalooter --pre"],
-            ["instalooter hashtag selfie -n 500 -D"]
+            [f"instalooter hashtag selfie -n {items} -D"]
         )
 
 
@@ -108,7 +113,7 @@ class InstagramScraper(PipProgram):
 
         username = os.environ.get('INSTAGRAM_USER')
         password = os.environ.get('INSTAGRAM_PASS')
-        test_command = "instagram-scraper selfie --tag --maximum=500" + \
+        test_command = f"instagram-scraper selfie --tag --maximum={items}" + \
                        f" -u {username} -p {password}"
 
         super().__init__(

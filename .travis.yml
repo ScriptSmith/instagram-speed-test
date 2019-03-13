@@ -8,5 +8,5 @@ install:
 script:
 - python main.py
 before_install:
-- openssl aes-256-cbc -K $encrypted_457f57d520f8_key -iv 0 $encrypted_457f57d520f8_iv
+- openssl aes-256-cbc -K $encrypted_457f57d520f8_key $encrypted_457f57d520f8_iv
   -in key.json.enc -out key.json -d

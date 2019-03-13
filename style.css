@@ -28,8 +28,8 @@ th, td {
 }
 
 a {
-    text-decoration: none;
-    color: #548dff;
+    text-decoration: underline;
+    color: white;
 }
 
 @media screen and (max-width: 600px) {

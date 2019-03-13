@@ -1,0 +1,39 @@
+h1, #dateHeading {
+    text-align: center;
+    font-family: Arial, serif;
+    font-weight: normal;
+}
+
+h1 {
+    font-size: 32pt;
+}
+
+#dateHeading {
+    font-size: 24pt;
+}
+
+table {
+    margin: auto;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 2px;
+}
+
+#curve_chart {
+    margin-top: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #548dff;
+}
+
+@media screen and (max-width: 600px) {
+    table {
+        display: none;
+    }
+}

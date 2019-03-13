@@ -2,12 +2,20 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        google.charts.load('current', {'packages': ['corechart']});
-        google.charts.setOnLoadCallback(getData);
+        const tools = [
+            'instamancer',
+            'instaphyte',
+            'instaloader',
+            'instalooter',
+            'instagram-scraper',
+        ];
+
+        const postNumber = 500;
 
         function getData() {
             const config = {
@@ -27,20 +35,29 @@
                 querySnapshot.forEach((doc) => {
                     data[doc.id] = doc.data();
                 });
+                addTableValues(data);
                 drawChart(data);
             });
         }
 
-        function drawChart(timeData) {
-            const tools = [
-                'instamancer',
-                'instaphyte',
-                'instaloader',
-                'instalooter',
-                'instagram-scraper',
-            ];
+        function addTableValues(timeData) {
+            const speedValuesDiv = document.querySelector("#speedValues");
+            const lastTime = Object.keys(timeData).pop();
+            const lastDate = new Date(0);
+            lastDate.setUTCSeconds(lastTime);
 
-            var data = new google.visualization.DataTable();
+            document.querySelector("#dateHeading").innerHTML = lastDate.toLocaleString();
+
+            const speedValues = timeData[lastTime];
+            for (const tool of tools) {
+                const toolSpeedCol = document.createElement("td");
+                toolSpeedCol.innerText = Math.round(postNumber / speedValues[tool]) + " posts/second";
+                speedValuesDiv.appendChild(toolSpeedCol);
+            }
+        }
+
+        function drawChart(timeData) {
+            const data = new google.visualization.DataTable();
             data.addColumn('datetime', 'DateTime');
             for (const tool of tools) {
                 data.addColumn('number', tool);
@@ -54,25 +71,55 @@
                 row.push(d);
 
                 for (const tool of tools) {
-                    row.push(values[tool] > 0 ? values[tool] / 500 : null)
+                    row.push(values[tool] > 0 ? postNumber / values[tool] : null)
                 }
                 data.addRow(row);
             });
 
-            var options = {
-                title: 'Instagram Speed Test',
+            const options = {
+                chartArea: {
+                    top: 30
+                },
                 curveType: 'function',
                 legend: {position: 'bottom'},
                 interpolateNulls: true,
+                explorer: {
+                    keepInBounds: true
+                },
+                vAxis: {
+                    title: "Posts/second"
+                },
+                lineWidth: 4,
+                pointSize: 5,
+
             };
 
-            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+            const chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
 
             chart.draw(data, options);
         }
+
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(getData);
     </script>
 </head>
 <body>
+<h1>Instagram Speed Test</h1>
+<table>
+    <thead>
+    <caption id="dateHeading"></caption>
+    <tr>
+        <th><a href="https://github.com/scriptsmith/instamancer">instamancer</a></th>
+        <th><a href="https://github.com/scriptsmith/instaphyte">instaphyte</a></th>
+        <th><a href="https://github.com/instaloader/instaloader">instaloader</a></th>
+        <th><a href="https://github.com/althonos/InstaLooter">instalooter</a></th>
+        <th><a href="https://github.com/rarcega/instagram-scraper">instagram-scraper</a></th>
+    </tr>
+    <tr id="speedValues">
+
+    </tr>
+    </thead>
+</table>
 <div id="curve_chart" style="width: 100%; height: 600px"></div>
 </body>
 </html>

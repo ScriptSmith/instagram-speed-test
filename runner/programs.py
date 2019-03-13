@@ -3,7 +3,7 @@ import subprocess
 import time
 from typing import List
 
-items = 100
+items = 500
 
 
 class Program:

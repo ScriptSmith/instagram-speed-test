@@ -33,3 +33,5 @@ for program in programs:
 
 doc_ref = db.collection('times').document(str(current_time))
 doc_ref.set(appendage)
+
+print("UPLOADED RESULTS")

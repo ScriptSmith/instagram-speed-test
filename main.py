@@ -34,9 +34,11 @@ for program in programs:
 
     appendage[program.name] = duration
 
-    data = requests.get(
-        f"https://img.shields.io/badge/{round(items / duration, 2)} "
-        f"posts%2Fsecond-brightgreen.svg")
+    url = f"https://img.shields.io/badge/{round(items / duration, 2)}" \
+        f" posts%2Fsecond-brightgreen.svg" if duration > 0 else \
+        "https://img.shields.io/badge/-failed-red.svg"
+
+    data = requests.get(url)
 
     blob = bucket.blob(program.name + ".svg")
     blob.upload_from_string(data.text, content_type="image/svg+xml")

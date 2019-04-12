@@ -34,7 +34,7 @@ for program in programs:
 
     appendage[program.name] = duration
 
-    url = f"https://img.shields.io/badge/{round(items / duration, 2)}" \
+    url = f"https://img.shields.io/badge/speed-{round(items / duration, 2)}" \
         f" posts%2Fsecond-brightgreen.svg" if duration > 0 else \
         "https://img.shields.io/badge/-failed-red.svg"
 

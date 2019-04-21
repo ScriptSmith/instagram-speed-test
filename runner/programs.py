@@ -21,7 +21,9 @@ class Program:
         self.subprocess_cmd(commands, print_output=False)
 
     def test(self):
-        commands = " && ".join(self.test_commands)
+        test_commands = list(self.test_commands)
+        test_commands[-1] = f"timeout 300 {test_commands[-1]}"
+        commands = " && ".join(test_commands)
 
         start_time = time.time()
         retcode = self.subprocess_cmd(commands, print_output=True)

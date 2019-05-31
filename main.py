@@ -1,18 +1,21 @@
 import random
 import time
+import json
 
 import runner.programs
 from runner.items import items
 
 import requests
 import firebase_admin
-from firebase_admin import credentials, firestore, storage
+from firebase_admin import credentials, storage
 
 cred = credentials.Certificate('key.json')
 default_app = firebase_admin.initialize_app(cred)
 
-db = firestore.client()
 bucket = storage.bucket("instagram-speed-test.appspot.com")
+
+speeds_blob = bucket.blob("speeds.json")
+speeds = json.loads(speeds_blob.download_as_string())
 
 programs = [
     runner.programs.Instamancer(),
@@ -26,7 +29,7 @@ random.shuffle(programs)
 
 current_time = int(time.time())
 
-appendage = {}
+appendage = speeds['times'][str(current_time)] = {}
 
 for program in programs:
     program.setup()
@@ -43,7 +46,6 @@ for program in programs:
     blob = bucket.blob(program.name + ".svg")
     blob.upload_from_string(data.text, content_type="image/svg+xml")
 
-doc_ref = db.collection('times').document(str(current_time))
-doc_ref.set(appendage)
-
+speeds_blob.upload_from_string(json.dumps(speeds),
+                               content_type="application/json")
 print("UPLOADED RESULTS")

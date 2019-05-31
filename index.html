@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-firestore.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-79900226-3"></script>
@@ -32,26 +30,12 @@
         const postNumber = 500;
 
         function getData() {
-            const config = {
-                apiKey: "AIzaSyD3DCu_y5AC3D1Qn8mczJwDxCd-Wl_7_DQ",
-                authDomain: "instagram-speed-test.firebaseapp.com",
-                databaseURL: "https://instagram-speed-test.firebaseio.com",
-                projectId: "instagram-speed-test",
-                storageBucket: "instagram-speed-test.appspot.com",
-                messagingSenderId: "998820631733"
-            };
-            firebase.initializeApp(config);
-
-            const db = firebase.firestore();
-
-            const data = {};
-            db.collection("times").get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    data[doc.id] = doc.data();
+            fetch("https://firebasestorage.googleapis.com/v0/b/instagram-speed-test.appspot.com/o/speeds.json?alt=media&token=04829230-f4b0-48f0-9f83-8bd6eeec402f")
+                .then(response => response.json())
+                .then((data) => {
+                    addTableValues(data["times"]);
+                    drawChart(data["times"]);
                 });
-                addTableValues(data);
-                drawChart(data);
-            });
         }
 
         function addTableValues(timeData) {

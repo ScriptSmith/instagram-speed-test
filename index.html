@@ -85,6 +85,12 @@
                 data.addRow(row);
             });
 
+            let earliestDate = new Date();
+            const firstDate = new Date(0);
+            firstDate.setUTCSeconds(parseInt(Object.keys(timeData)[0]));
+            earliestDate.setMonth(earliestDate.getMonth() - 6);
+            earliestDate = earliestDate < firstDate ? firstDate : earliestDate;
+
             const options = {
                 chartArea: {
                     top: 30,
@@ -99,8 +105,16 @@
                 vAxis: {
                     title: "Posts/second"
                 },
+                explorer: {},
                 hAxis: {
-                    format: "MMM, y"
+                    format: "MMMM, yyyy",
+                    viewWindow: {
+                        min: earliestDate,
+                        max: new Date()
+                    },
+                    minorGridlines: {
+                        count: 0
+                    }
                 },
                 lineWidth: 4,
                 pointSize: 5,

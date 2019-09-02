@@ -76,7 +76,7 @@ class Instamancer(Program):
             ["npm install -g instamancer"],
             [
                 "export NO_SANDBOX=1",
-                f"instamancer hashtag selfie --count={items} -f=/dev/null"
+                f"instamancer hashtag selfie --count={items} -f=/dev/null --plugin LargeFirst"
             ]
         )
 
